@@ -3,5 +3,5 @@
     Audio/Video Transport Core Maintenance Working Group mailing list (avt@ietf.org),
     which is archived at <eref target="https://mailarchive.ietf.org/arch/browse/avt/"/>.</t>
 <t>Source for this draft and an issue tracker can be found at
-    <eref target="https://github.com/mengelbart/rtp-over-quic-draft"/>.</t>
+    <eref target="https://github.com/ietf-wg-avtcore/draft-ietf-avtcore-rtp-over-quic"/>.</t>
 </note>
