@@ -5,7 +5,7 @@ category: exp
 date: {DATE}
 
 ipr: trust200902
-area: "Applications and Real-Time"
+area: "Web and Internet Transport"
 workgroup: "Audio/Video Transport Core Maintenance"
 keyword: Internet-Draft
 
