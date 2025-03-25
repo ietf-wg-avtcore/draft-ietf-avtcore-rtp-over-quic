@@ -1,4 +1,4 @@
 # License
 
 See the
-[guidelines for contributions](https://github.com/mengelbart/rtp-over-quic-draft/blob/main/CONTRIBUTING.md).
+[guidelines for contributions](https://github.com/ietf-wg-avtcore/draft-ietf-avtcore-rtp-over-quic/blob/main/CONTRIBUTING.md).
