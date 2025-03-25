@@ -5,9 +5,9 @@
 Audio/Video Transport Core Maintenance                      M. Engelbart
 Internet-Draft                                                    J. Ott
 Intended status: Experimental             Technical University of Munich
-Expires: 22 September 2025                                    S. Dawkins
+Expires: 26 September 2025                                    S. Dawkins
                                                      Tencent America LLC
-                                                           21 March 2025
+                                                           25 March 2025
 
 
                           RTP over QUIC (RoQ)
@@ -52,7 +52,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 22 September 2025.
+   This Internet-Draft will expire on 26 September 2025.
 
 Copyright Notice
 
