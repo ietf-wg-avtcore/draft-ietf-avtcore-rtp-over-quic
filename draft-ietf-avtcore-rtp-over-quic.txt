@@ -35,7 +35,7 @@ Discussion Venues
    archived at https://mailarchive.ietf.org/arch/browse/avt/.
 
    Source for this draft and an issue tracker can be found at
-   https://github.com/mengelbart/rtp-over-quic-draft.
+   https://github.com/ietf-wg-avtcore/draft-ietf-avtcore-rtp-over-quic.
 
 Status of This Memo
 
