@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-07-24T01:23:50.171490+00:00",
+  "timestamp": "2025-07-27T01:39:50.583490+00:00",
   "repo": "ietf-wg-avtcore/draft-ietf-avtcore-rtp-over-quic",
   "labels": [
     {
@@ -3855,9 +3855,17 @@
       "labels": [],
       "body": "In the meeting at IETF 123, we discussed multiplexing using the RoQ flow ID and its relation to BUNDLE in SDP offer/answer. I think the issue is these two statements in the RoQ draft:\n\n> RTP packets of different RTP sessions MUST use distinct flow identifiers.\n\nand \n\n> A single RTP session can be associated with one or two flow identifiers. Thus, it is possible to send RTP and RTCP packets belonging to the same session using different flow identifiers.\n\nI think the first one is correct. But the second one limits the number of flow IDs per session to two, which seems wrong. I think it should say that each RTP/RTCP stream has a distinct flow ID, instead of limiting each session to two flow IDs. That way, we could have multiple RTP streams in the same RTP session and RoQ connection. That would allow multiple RTP streams with different SSRCs (and flow IDs) in the same session, and we could have one flow ID for RTCP reporting on multiple SSRCs.",
       "createdAt": "2025-07-22T15:57:08Z",
-      "updatedAt": "2025-07-22T15:57:08Z",
+      "updatedAt": "2025-07-25T07:11:56Z",
       "closedAt": null,
-      "comments": []
+      "comments": [
+        {
+          "author": "SpencerDawkins",
+          "authorAssociation": "COLLABORATOR",
+          "body": "@mengelbart - I agree, and I suspect that the second statement confused @gloinul - I understood him to say during IETF 123 AVTCORE that RoQ connections contained one or two flows, which confused me. In my mind, a RoQ Connection is equivalent to a BUNDLE. Both contain multiple RTP streams; we use Flow ID to distinguish between media streams in RoQ. ",
+          "createdAt": "2025-07-25T07:11:55Z",
+          "updatedAt": "2025-07-25T07:11:55Z"
+        }
+      ]
     }
   ],
   "pulls": [
