@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-07-29T01:43:26.634129+00:00",
+  "timestamp": "2025-07-31T01:24:51.407315+00:00",
   "repo": "ietf-wg-avtcore/draft-ietf-avtcore-rtp-over-quic",
   "labels": [
     {
@@ -9920,7 +9920,7 @@
       "labels": [],
       "body": "",
       "createdAt": "2024-03-13T19:19:39Z",
-      "updatedAt": "2024-11-08T03:54:29Z",
+      "updatedAt": "2025-07-30T15:33:51Z",
       "baseRepository": "ietf-wg-avtcore/draft-ietf-avtcore-rtp-over-quic",
       "baseRefName": "main",
       "baseRefOid": "8295ab47420724f0c512b92c1b156333d641660a",
@@ -9979,6 +9979,19 @@
           "body": "",
           "createdAt": "2024-03-18T10:58:44Z",
           "updatedAt": "2024-03-18T10:58:44Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDOFUmh7s63HgW2",
+          "commit": {
+            "abbreviatedOid": "c01b681"
+          },
+          "author": "HalfwhiteandNerdy",
+          "authorAssociation": "NONE",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2025-07-30T15:33:51Z",
+          "updatedAt": "2025-07-30T15:33:51Z",
           "comments": []
         }
       ]
