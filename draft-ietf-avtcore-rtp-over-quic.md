@@ -528,12 +528,13 @@ the specifics of mapping RTP to QUIC streams and DATAGRAMs, respectively.
 
 ## Multiplexing {#multiplexing}
 
-RoQ uses flow identifiers to multiplex different RTP streams on a
+RoQ uses flow identifiers to multiplex different RTP sessions on a
 single QUIC connection. A flow identifier is a QUIC variable-length integer as
 described in {{Section 16 of !RFC9000}}. Each flow identifier is associated with
-an RTP stream.
+an RTP session.
 
-In a QUIC connection using the ALPN token defined in {{alpn}}, every DATAGRAM and every QUIC stream MUST start with a flow identifier.
+In a QUIC connection using the ALPN token defined in {{alpn}}, every DATAGRAM and every QUIC stream MUST start with a
+flow identifier.
 An endpoint MUST NOT send any data in a DATAGRAM or stream that is not associated with the flow
 identifier which started the DATAGRAM or stream.
 
@@ -541,34 +542,42 @@ RTP packets of different RTP sessions MUST use distinct flow
 identifiers. If endpoints wish to send multiple types of media in a single RTP
 session, they can do so by following the guidance specified in {{?RFC8860}}.
 
-A single RTP session can be associated with one or two flow identifiers. Thus,
-it is possible to send RTP and RTCP packets belonging to the same session using
-different flow identifiers. RTP and RTCP packets of a single RTP session can use
+Historically, a single RTP session was associated with two transport identifiers, one carrying RTP media packets,
+and the other carrying RTCP packets associated with those RTP media packets {{!RFC3550}}.
+In RoQ, a flow identifier functions as a transport identifier. Thus,
+it is possible to send RTP and RTCP packets belonging to the same RTP session using
+different flow identifiers. RTP and RTCP packets belonging to a single RTP session can use
 the same flow identifier (following the procedures defined in {{?RFC5761}}), or
-they can use different flow identifiers.
+they can use two different flow identifiers.
 
-Endpoints need to associate flow identifiers with RTP streams. Depending on the
+{{?RFC8843}} describes a Session Description Protocol (SDP) Grouping Framework extension called 'BUNDLE'. This
+extension can be used with the SDP offer/answer mechanism to negotiate the usage of a single transport for sending
+and receiving media described by multiple SDP media descriptions ("m=" sections). If the application is using the
+BUNDLE extension, multiple RTP media flows can be carried in a single RoQ flow identifier,
+and an arbitrary number of RoQ flow identifers can be carried in a single QUIC connection.
+
+Endpoints need to associate flow identifiers with RTP sessions. Depending on the
 context of the application, the association can be statically configured,
 signaled using an out-of-band signaling mechanism (e.g., SDP), or applications
 might be able to identify the stream based on the RTP packets sent on the stream
 (e.g., by inspecting the payload type).
 
 If an endpoint receives a flow identifier that it cannot associate with an RTP
-stream, the endpoint MAY close the connection using the ROQ_UNKNOWN_FLOW_ID
+session, the endpoint MAY close the connection using the ROQ_UNKNOWN_FLOW_ID
 error code. Closing the connection can be a valid response if it is not expected
 that out of band signaling is still ongoing and the application cannot handle
 unknown flow identifiers.
 
-If the association of flow identifiers with RTP streams depends on out-of-band
+If the association of flow identifiers with RTP sessions depends on out-of-band
 signaling, the signaling mechanism SHOULD be completed before the exchange of
 RTP packets using the new flow identifiers starts.
 
 In cases where it cannot be guaranteed that signaling is completed before RTP
 packets are transmitted, streams or DATAGRAMs with a given flow identifer can
 arrive before the signaling finished. In that case, an endpoint cannot associate
-the stream or DATAGRAM with the corresponding RTP stream. The endpoint can
+the stream or DATAGRAM with the corresponding RTP session. The endpoint can
 buffer streams and DATAGRAMs using an unknown flow identifier until they can be
-associated with the corresponding RTP stream. To avoid resource exhaustion, the
+associated with the corresponding RTP session. To avoid resource exhaustion, the
 buffering endpoint MUST limit the number of streams and DATAGRAMs to buffer. If
 the number of buffered streams exceeds the limit on buffered streams, the
 endpoint MUST send a STOP_SENDING with the error code ROQ_UNKNOWN_FLOW_ID. It is
