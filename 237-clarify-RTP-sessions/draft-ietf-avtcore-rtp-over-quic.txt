@@ -5,9 +5,9 @@
 Audio/Video Transport Core Maintenance                      M. Engelbart
 Internet-Draft                                                    J. Ott
 Intended status: Experimental             Technical University of Munich
-Expires: 14 September 2025                                    S. Dawkins
+Expires: 9 May 2026                                           S. Dawkins
                                                      Tencent America LLC
-                                                           13 March 2025
+                                                         5 November 2025
 
 
                           RTP over QUIC (RoQ)
@@ -35,7 +35,7 @@ Discussion Venues
    archived at https://mailarchive.ietf.org/arch/browse/avt/.
 
    Source for this draft and an issue tracker can be found at
-   https://github.com/mengelbart/rtp-over-quic-draft.
+   https://github.com/ietf-wg-avtcore/draft-ietf-avtcore-rtp-over-quic.
 
 Status of This Memo
 
@@ -52,7 +52,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 14 September 2025.
+   This Internet-Draft will expire on 9 May 2026.
 
 Copyright Notice
 
@@ -137,6 +137,7 @@ Table of Contents
      14.2.  bbc/gst-roq
      14.3.  mengelbart/rtp-over-quic
      14.4.  meetecho/imquic
+     14.5.  gstreamer/gst-plugin-quinn
    15. Security Considerations
    16. IANA Considerations
      16.1.  Registration of a RoQ Identification String
@@ -916,10 +917,10 @@ Table of Contents
 
 5.1.  Multiplexing
 
-   RoQ uses flow identifiers to multiplex different RTP streams on a
+   RoQ uses flow identifiers to multiplex different RTP sessions on a
    single QUIC connection.  A flow identifier is a QUIC variable-length
    integer as described in Section 16 of [RFC9000].  Each flow
-   identifier is associated with an RTP stream.
+   identifier is associated with an RTP session.
 
    In a QUIC connection using the ALPN token defined in Section 4, every
    DATAGRAM and every QUIC stream MUST start with a flow identifier.  An
@@ -932,14 +933,26 @@ Table of Contents
    single RTP session, they can do so by following the guidance
    specified in [RFC8860].
 
-   A single RTP session can be associated with one or two flow
-   identifiers.  Thus, it is possible to send RTP and RTCP packets
-   belonging to the same session using different flow identifiers.  RTP
-   and RTCP packets of a single RTP session can use the same flow
-   identifier (following the procedures defined in [RFC5761]), or they
-   can use different flow identifiers.
+   Historically, a single RTP session was associated with two transport
+   identifiers, one carrying RTP media packets, and the other carrying
+   RTCP packets associated with those RTP media packets [RFC3550].  In
+   RoQ, a flow identifier functions as a transport identifier.  Thus, it
+   is possible to send RTP and RTCP packets belonging to the same RTP
+   session using different flow identifiers.  RTP and RTCP packets
+   belonging to a single RTP session can use the same flow identifier
+   (following the procedures defined in [RFC5761]), or they can use two
+   different flow identifiers.
 
-   Endpoints need to associate flow identifiers with RTP streams.
+   [RFC8843] describes a Session Description Protocol (SDP) Grouping
+   Framework extension called 'BUNDLE'.  This extension can be used with
+   the SDP offer/answer mechanism to negotiate the usage of a single
+   transport for sending and receiving media described by multiple SDP
+   media descriptions ("m=" sections).  If the application is using the
+   BUNDLE extension, multiple RTP media flows can be carried in a single
+   RoQ flow identifier, and an arbitrary number of RoQ flow identifers
+   can be carried in a single QUIC connection.
+
+   Endpoints need to associate flow identifiers with RTP sessions.
    Depending on the context of the application, the association can be
    statically configured, signaled using an out-of-band signaling
    mechanism (e.g., SDP), or applications might be able to identify the
@@ -947,13 +960,13 @@ Table of Contents
    inspecting the payload type).
 
    If an endpoint receives a flow identifier that it cannot associate
-   with an RTP stream, the endpoint MAY close the connection using the
+   with an RTP session, the endpoint MAY close the connection using the
    ROQ_UNKNOWN_FLOW_ID error code.  Closing the connection can be a
    valid response if it is not expected that out of band signaling is
    still ongoing and the application cannot handle unknown flow
    identifiers.
 
-   If the association of flow identifiers with RTP streams depends on
+   If the association of flow identifiers with RTP sessions depends on
    out-of-band signaling, the signaling mechanism SHOULD be completed
    before the exchange of RTP packets using the new flow identifiers
    starts.
@@ -962,9 +975,9 @@ Table of Contents
    before RTP packets are transmitted, streams or DATAGRAMs with a given
    flow identifer can arrive before the signaling finished.  In that
    case, an endpoint cannot associate the stream or DATAGRAM with the
-   corresponding RTP stream.  The endpoint can buffer streams and
+   corresponding RTP session.  The endpoint can buffer streams and
    DATAGRAMs using an unknown flow identifier until they can be
-   associated with the corresponding RTP stream.  To avoid resource
+   associated with the corresponding RTP session.  To avoid resource
    exhaustion, the buffering endpoint MUST limit the number of streams
    and DATAGRAMs to buffer.  If the number of buffered streams exceeds
    the limit on buffered streams, the endpoint MUST send a STOP_SENDING
@@ -2159,6 +2172,40 @@ Table of Contents
 
    Last Updated:  07 January 2025
 
+14.5.  gstreamer/gst-plugin-quinn
+
+   Organization:  asymptotic
+
+   Implementation:  gst-plugin-quinn [gst-plugin-quinn]
+
+   Description:  GStreamer plugin with support for QUIC and RTP Over
+      QUIC (RoQ)
+
+   Level of Maturity:  alpha
+
+   Coverage:  The library supports sending and receiving RTP packets
+      using QUIC streams and QUIC DATAGRAMs, and supports multiplexing
+      using flow identifiers.  Using stream per packet is not supported
+      at the moment.  Applications using this GStreamer plugin are
+      responsible for any required out-of-band signalling, and managing
+      RTP sessions. quinnquicmux and quinnquicdemux provide RoQ
+      functionality with the QUIC transport handled by quinnquicsink and
+      quinnquicsrc plugins.  Applications can choose whether to send RTP
+      packets over streams or DATAGRAMs.  Basic examples are available
+      in the repository.
+
+   Version Compatibility:  [I-D.draft-ietf-avtcore-rtp-over-quic-12]
+
+   Licensing:  MPL
+
+   Implementation Experience: :
+
+   Contact Information:  Sanchayan Maity (sanchayan@asymptotic.io)
+
+      Arun Raghavan (arun@asymptotic.io)
+
+   Last Updated:  21 March 2025
+
 15.  Security Considerations
 
    RoQ is subject to the security considerations of RTP described in
@@ -2379,6 +2426,11 @@ Table of Contents
    [Copa]     "Copa: Practical Delay-Based Congestion Control for the
               Internet", 2018, <https://web.mit.edu/copa/>.
 
+   [gst-plugin-quinn]
+              "gst-plugin-quinn", n.d.,
+              <https://gitlab.freedesktop.org/gstreamer/gst-plugins-rs/-
+              /tree/main/net/quinn>.
+
    [gst-roq]  "RTP-over-QUIC elements for GStreamer", n.d.,
               <https://github.com/bbc/gst-roq>.
 
@@ -2413,9 +2465,9 @@ Table of Contents
               He, Y., Herglotz, C., and E. Francois, "RTP Control
               Protocol (RTCP) Messages for Temporal-Spatial Resolution",
               Work in Progress, Internet-Draft, draft-ietf-avtcore-rtcp-
-              green-metadata-05, 12 February 2025,
+              green-metadata-06, 14 August 2025,
               <https://datatracker.ietf.org/doc/html/draft-ietf-avtcore-
-              rtcp-green-metadata-05>.
+              rtcp-green-metadata-06>.
 
    [I-D.draft-ietf-avtcore-rtp-over-quic-00]
               Ott, J. and M. Engelbart, "RTP over QUIC", Work in
@@ -2456,23 +2508,24 @@ Table of Contents
    [I-D.draft-ietf-quic-ack-frequency]
               Iyengar, J., Swett, I., and M. Kühlewind, "QUIC
               Acknowledgment Frequency", Work in Progress, Internet-
-              Draft, draft-ietf-quic-ack-frequency-11, 28 February 2025,
+              Draft, draft-ietf-quic-ack-frequency-12, 20 October 2025,
               <https://datatracker.ietf.org/doc/html/draft-ietf-quic-
-              ack-frequency-11>.
+              ack-frequency-12>.
 
    [I-D.draft-ietf-quic-multipath]
               Liu, Y., Ma, Y., De Coninck, Q., Bonaventure, O., Huitema,
-              C., and M. Kühlewind, "Multipath Extension for QUIC", Work
-              in Progress, Internet-Draft, draft-ietf-quic-multipath-13,
-              3 March 2025, <https://datatracker.ietf.org/doc/html/
-              draft-ietf-quic-multipath-13>.
+              C., and M. Kühlewind, "Managing multiple paths for a QUIC
+              connection", Work in Progress, Internet-Draft, draft-ietf-
+              quic-multipath-17, 20 October 2025,
+              <https://datatracker.ietf.org/doc/html/draft-ietf-quic-
+              multipath-17>.
 
    [I-D.draft-ietf-quic-reliable-stream-reset]
               Seemann, M. and K. Oku, "QUIC Stream Resets with Partial
               Delivery", Work in Progress, Internet-Draft, draft-ietf-
-              quic-reliable-stream-reset-06, 28 February 2024,
+              quic-reliable-stream-reset-07, 14 June 2025,
               <https://datatracker.ietf.org/doc/html/draft-ietf-quic-
-              reliable-stream-reset-06>.
+              reliable-stream-reset-07>.
 
    [I-D.draft-ietf-rmcat-gcc]
               Holmer, S., Lundin, H., Carlucci, G., De Cicco, L., and S.
@@ -2490,13 +2543,12 @@ Table of Contents
               whip-16>.
 
    [I-D.draft-smith-quic-receive-ts]
-              Smith, C., Swett, I., Beshay, J., Jaiswal, S.,
-              Purushothaman, I., and B. Schlinker, "QUIC Extended
-              Acknowledgement for Reporting Packet Receive Timestamps",
-              Work in Progress, Internet-Draft, draft-smith-quic-
-              receive-ts-01, 3 March 2025,
+              Smith, C., Swett, I., Beshay, J., and S. Jaiswal, "QUIC
+              Extended Acknowledgement for Reporting Packet Receive
+              Timestamps", Work in Progress, Internet-Draft, draft-
+              smith-quic-receive-ts-03, 21 July 2025,
               <https://datatracker.ietf.org/doc/html/draft-smith-quic-
-              receive-ts-01>.
+              receive-ts-03>.
 
    [I-D.draft-thomson-quic-enough]
               Thomson, M., "Signaling That a QUIC Receiver Has Enough
@@ -2809,6 +2861,12 @@ Table of Contents
               Browser-Based Applications", RFC 8825,
               DOI 10.17487/RFC8825, January 2021,
               <https://www.rfc-editor.org/rfc/rfc8825>.
+
+   [RFC8843]  Holmberg, C., Alvestrand, H., and C. Jennings,
+              "Negotiating Media Multiplexing Using the Session
+              Description Protocol (SDP)", RFC 8843,
+              DOI 10.17487/RFC8843, January 2021,
+              <https://www.rfc-editor.org/rfc/rfc8843>.
 
    [RFC8849]  Even, R. and J. Lennox, "Mapping RTP Streams to
               Controlling Multiple Streams for Telepresence (CLUE) Media
