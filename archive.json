@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-11-04T01:15:44.924338+00:00",
+  "timestamp": "2025-11-06T01:16:28.176585+00:00",
   "repo": "ietf-wg-avtcore/draft-ietf-avtcore-rtp-over-quic",
   "labels": [
     {
@@ -12320,6 +12320,34 @@
           ]
         }
       ]
+    },
+    {
+      "number": 238,
+      "id": "PR_kwDOFUmh7s6xr91Z",
+      "title": "Clarify RTP sessions, RTP streams, and RoQ flows",
+      "url": "https://github.com/ietf-wg-avtcore/draft-ietf-avtcore-rtp-over-quic/pull/238",
+      "state": "OPEN",
+      "author": "SpencerDawkins",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [
+        "SpencerDawkins"
+      ],
+      "labels": [],
+      "body": "closes #237",
+      "createdAt": "2025-11-05T15:51:17Z",
+      "updatedAt": "2025-11-05T15:51:18Z",
+      "baseRepository": "ietf-wg-avtcore/draft-ietf-avtcore-rtp-over-quic",
+      "baseRefName": "main",
+      "baseRefOid": "bbc39f86f4c8ee4283302038bbf3a477caf21e50",
+      "headRepository": "ietf-wg-avtcore/draft-ietf-avtcore-rtp-over-quic",
+      "headRefName": "237-clarify-RTP-sessions",
+      "headRefOid": "fe3b538ac2a1bc03f1b84c253741ab9c8538c9e7",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": []
     }
   ]
 }
