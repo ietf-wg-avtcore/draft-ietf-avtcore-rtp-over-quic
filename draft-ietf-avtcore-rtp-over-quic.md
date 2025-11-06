@@ -208,7 +208,7 @@ relationships. Prioritization is left to the application using RoQ.
 
 This document does not cover signaling for session setup. SDP for RoQ
 is defined in separate documents such as
-{{?I-D.draft-dawkins-avtcore-sdp-rtp-quic}}, and can be carried in any signaling
+{{?I-D.draft-ietf-avtcore-sdp-roq}}, and can be carried in any signaling
 protocol that can carry SDP, including the Session Initiation Protocol (SIP)
 ({{?RFC3261}}), Real-Time Protocols for Browser-Based Applications (RTCWeb)
 ({{?RFC8825}}), or WebRTC-HTTP Ingestion Protocol (WHIP)
