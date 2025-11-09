@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-11-06T01:16:28.176585+00:00",
+  "timestamp": "2025-11-09T01:19:29.058173+00:00",
   "repo": "ietf-wg-avtcore/draft-ietf-avtcore-rtp-over-quic",
   "labels": [
     {
@@ -12342,6 +12342,34 @@
       "headRepository": "ietf-wg-avtcore/draft-ietf-avtcore-rtp-over-quic",
       "headRefName": "237-clarify-RTP-sessions",
       "headRefOid": "fe3b538ac2a1bc03f1b84c253741ab9c8538c9e7",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 239,
+      "id": "PR_kwDOFUmh7s6x8fXA",
+      "title": "Update sdp-roq-draftname",
+      "url": "https://github.com/ietf-wg-avtcore/draft-ietf-avtcore-rtp-over-quic/pull/239",
+      "state": "OPEN",
+      "author": "SpencerDawkins",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [
+        "SpencerDawkins"
+      ],
+      "labels": [],
+      "body": "I should have remembered this when I was updating the SDP-RoQ draft after adoption!",
+      "createdAt": "2025-11-06T16:50:14Z",
+      "updatedAt": "2025-11-06T16:50:15Z",
+      "baseRepository": "ietf-wg-avtcore/draft-ietf-avtcore-rtp-over-quic",
+      "baseRefName": "main",
+      "baseRefOid": "bbc39f86f4c8ee4283302038bbf3a477caf21e50",
+      "headRepository": "ietf-wg-avtcore/draft-ietf-avtcore-rtp-over-quic",
+      "headRefName": "update-sdp-roq-draftname",
+      "headRefOid": "a263f4eba26cb3da98c4f2e55b7412acc5fc3ed2",
       "closedAt": null,
       "mergedAt": null,
       "mergedBy": null,
